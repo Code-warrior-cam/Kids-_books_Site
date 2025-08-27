@@ -1,225 +1,128 @@
-  import { useState, useEffect } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { motion, AnimatePresence } from "framer-motion";
+                      <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kids Books Website</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      color: #333;
+    }
 
-const books = [
-  {
-    title: "Profession, Months & Electronic",
-    cover: "/images/book1.png",
-    description:
-      "Learn about professions, months and basic electronics with colorful illustrations.",
-    pdf:
-      "https://drive.google.com/file/d/15VTmeT5K_M7C2pMM2JpZ0xn43yU_KUtY/view?usp=drivesdk",
-    sample:
-      "https://drive.google.com/file/d/1bjF0-nXjT8z1XzMizmGcvGB0W_Svhi3N/view?usp=drivesdk",
-  },
-  {
-    title: "Fruits, Vegetables & Flowers",
-    cover: "/images/book2.png",
-    description:
-      "Fun introduction to fruits, vegetables, and flowers with interactive learning.",
-    pdf:
-      "https://drive.google.com/file/d/1fSbqZnbt-gIpw2ZgbxBTDKoUPNpVv_hZ/view?usp=drivesdk",
-    sample:
-      "https://drive.google.com/file/d/1bjF0-nXjT8z1XzMizmGcvGB0W_Svhi3N/view?usp=drivesdk",
-  },
-  {
-    title: "Shapes, Colours & Body Parts",
-    cover: "/images/book3.png",
-    description:
-      "Identify shapes, colors and body parts with engaging activities for kids.",
-    pdf:
-      "https://drive.google.com/file/d/18yWQnyRVyaMjpH6rvm8Nsna5VS0KJMB3/view?usp=drivesdk",
-    sample:
-      "https://drive.google.com/file/d/1bjF0-nXjT8z1XzMizmGcvGB0W_Svhi3N/view?usp=drivesdk",
-  },
-  {
-    title: "Animals, Birds & Insects",
-    cover: "/images/book4.png",
-    description:
-      "Discover animals, birds and insects with realistic illustrations.",
-    pdf:
-      "https://drive.google.com/file/d/1MmeLRLZewoj_CCQdERmyTWFaj8LAKQ0M/view?usp=drivesdk",
-    sample:
-      "https://drive.google.com/file/d/1bjF0-nXjT8z1XzMizmGcvGB0W_Svhi3N/view?usp=drivesdk",
-  },
-];
+    /* Cover / Hero Section */
+    .hero {
+      height: 70vh;
+      background: url("images/cover.jpg") center/cover no-repeat;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: white;
+    }
+    .hero h1 {
+      font-size: 3rem;
+      background: rgba(0,0,0,0.5);
+      padding: 20px;
+      border-radius: 12px;
+    }
 
-export default function KidsBooksWebsite() {
-  const [selectedBook, setSelectedBook] = useState(null);
-  const [library, setLibrary] = useState([]);
-  const [showLibrary, setShowLibrary] = useState(false);
+    /* Books Section */
+    .container {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      overflow: hidden;
+      transition: transform 0.2s ease;
+    }
+    .card:hover {
+      transform: scale(1.05);
+    }
+    .card img {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+    }
+    .card h3 {
+      margin: 15px;
+      font-size: 1.2rem;
+    }
+    .card p {
+      margin: 0 15px 15px;
+      font-size: 0.95rem;
+      color: #555;
+    }
+    .card a {
+      display: block;
+      margin: 0 15px 15px;
+      padding: 10px;
+      text-align: center;
+      background: #4CAF50;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+    }
+    .card a:hover {
+      background: #388E3C;
+    }
+  </style>
+</head>
+<body>
 
-  // Load library from localStorage
-  useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem("myLibrary")) || [];
-    setLibrary(stored);
-  }, []);
+  <!-- Cover Section -->
+  <div class="hero">
+    <h1>Welcome to Kids Books</h1>
+  </div>
 
-  // Save library to localStorage whenever updated
-  useEffect(() => {
-    localStorage.setItem("myLibrary", JSON.stringify(library));
-  }, [library]);
+  <!-- Books Section -->
+  <div class="container">
+    <h2>Our Books</h2>
+    <div class="grid">
+      <!-- Book 1 -->
+      <div class="card">
+        <img src="images/book1.png" alt="Book 1" />
+        <h3>Professions, Months & Electronics</h3>
+        <p>Learn about professions, months, and electronics with colorful illustrations.</p>
+        <a href="books/book1.pdf" target="_blank">Read PDF</a>
+      </div>
 
-  const handleBuy = (book) => {
-    const paymentLink = `upi://pay?pa=9574858717@ibl&pn=CliffClimber&am=99&cu=INR&tn=Payment for ${encodeURIComponent(
-      book.title
-    )}`;
-    window.open(paymentLink, "_blank");
+      <!-- Book 2 -->
+      <div class="card">
+        <img src="images/book2.png" alt="Book 2" />
+        <h3>Animals & Nature</h3>
+        <p>Discover amazing animals and the beauty of nature.</p>
+        <a href="books/book2.pdf" target="_blank">Read PDF</a>
+      </div>
 
-    // After payment, auto-open PDF & add to library
-    setTimeout(() => {
-      window.open(book.pdf, "_blank");
-      if (!library.find((b) => b.title === book.title)) {
-        setLibrary([...library, book]);
-      }
-    }, 3000);
-  };
+      <!-- Book 3 -->
+      <div class="card">
+        <img src="images/book3.png" alt="Book 3" />
+        <h3>Numbers & Alphabets</h3>
+        <p>Fun introduction to numbers and alphabets for kids.</p>
+        <a href="books/book3.pdf" target="_blank">Read PDF</a>
+      </div>
 
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-sky-100 to-white p-6">
-      {/* Header */}
-      <header className="text-center mb-10">
-        <h1 className="text-4xl font-bold text-sky-800 mb-2">
-          Cliff Climber Kids Books
-        </h1>
-        <p className="text-sky-600">Fun learning for curious little minds</p>
-        <Button
-          variant="outline"
-          className="mt-4 border-sky-600 text-sky-700 hover:bg-sky-50 rounded-xl"
-          onClick={() => setShowLibrary(!showLibrary)}
-        >
-          {showLibrary ? "Back to Store" : "My Library"}
-        </Button>
-      </header>
-
-      {!showLibrary ? (
-        // Store Books Grid
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {books.map((book, index) => (
-            <motion.div
-              key={index}
-              role="button"
-              tabIndex={0}
-              whileHover={{ scale: 1.05 }}
-              className="cursor-pointer"
-              onClick={() => setSelectedBook(book)}
-              onKeyDown={(e) => e.key === "Enter" && setSelectedBook(book)}
-            >
-              <Card className="rounded-2xl shadow-md overflow-hidden">
-                <img
-                  src={book.cover}
-                  alt={`Cover of ${book.title}`}
-                  className="w-full h-64 object-contain bg-white"
-                />
-                <CardContent className="p-4 text-center">
-                  <h2 className="text-lg font-semibold text-sky-700">
-                    {book.title}
-                  </h2>
-                </CardContent>
-              </Card>
-            </motion.div>
-          ))}
-        </div>
-      ) : (
-        // My Library Section
-        <div>
-          <h2 className="text-2xl font-bold text-sky-800 mb-6 text-center">
-            📚 My Library
-          </h2>
-          {library.length === 0 ? (
-            <p className="text-center text-gray-600">
-              No books purchased yet. Buy a book to see it here.
-            </p>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {library.map((book, index) => (
-                <Card
-                  key={index}
-                  className="rounded-2xl shadow-md overflow-hidden"
-                >
-                  <img
-                    src={book.cover}
-                    alt={`Cover of ${book.title}`}
-                    className="w-full h-64 object-contain bg-white"
-                  />
-                  <CardContent className="p-4 text-center">
-                    <h2 className="text-lg font-semibold text-sky-700">
-                      {book.title}
-                    </h2>
-                    <Button
-                      className="w-full mt-3 bg-sky-600 text-white rounded-xl"
-                      onClick={() => window.open(book.pdf, "_blank")}
-                    >
-                      Open PDF
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Book Modal */}
-      <AnimatePresence>
-        {selectedBook && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4"
-          >
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              className="bg-white rounded-2xl shadow-xl max-w-lg w-full p-6 relative"
-            >
-              <button
-                className="absolute top-3 right-3 text-gray-600 hover:text-black"
-                onClick={() => setSelectedBook(null)}
-              >
-                ✕
-              </button>
-              <img
-                src={selectedBook.cover}
-                alt={`Cover of ${selectedBook.title}`}
-                className="w-full h-72 object-contain mb-4"
-              />
-              <h2 className="text-2xl font-bold text-sky-800 mb-2">
-                {selectedBook.title}
-              </h2>
-              <p className="text-gray-600 mb-4">
-                {selectedBook.description}
-              </p>
-
-              {/* Sample PDF button */}
-              <Button
-                variant="outline"
-                className="w-full mb-3 border-sky-600 text-sky-700 hover:bg-sky-50 rounded-xl"
-                onClick={() => window.open(selectedBook.sample, "_blank")}
-              >
-                Download Sample PDF
-              </Button>
-
-              {/* Buy button */}
-              <Button
-                className="w-full bg-sky-600 text-white rounded-xl"
-                onClick={() => handleBuy(selectedBook)}
-              >
-                Buy & Access Full PDF
-              </Button>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Footer */}
-      <footer className="text-center mt-12 text-sky-700">
-        <p>© 2025 Cliff Climber Kids Books. All rights reserved.</p>
-      </footer>
+      <!-- Book 4 -->
+      <div class="card">
+        <img src="images/book4.png" alt="Book 4" />
+        <h3>Colors & Shapes</h3>
+        <p>Learn about basic colors and shapes with engaging pictures.</p>
+        <a href="books/book4.pdf" target="_blank">Read PDF</a>
+      </div>
     </div>
-  );
-}      
+  </div>
+
+</body>
+</html>
