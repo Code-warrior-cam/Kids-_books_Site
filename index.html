@@ -1,278 +1,225 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cliff Climber Kids Books</title>
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <meta name="description" content="Cliff Climber Kids Books - Fun learning for curious little minds" />
-  </head>
-  <body class="min-h-screen bg-gradient-to-b from-sky-100 to-white p-6">
-    <!-- Header -->
-    <header class="text-center mb-10">
-      <h1 class="text-4xl font-bold text-sky-800 mb-2">Cliff Climber Kids Books</h1>
-      <p class="text-sky-600">Fun learning for curious little minds</p>
-      <button
-        id="toggleLibraryBtn"
-        class="mt-4 border border-sky-600 text-sky-700 hover:bg-sky-50 rounded-xl px-4 py-2"
-      >
-        My Library
-      </button>
-    </header>
+  import { useState, useEffect } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { motion, AnimatePresence } from "framer-motion";
 
-    <!-- Store / Library Root -->
-    <main id="root" class="max-w-7xl mx-auto"></main>
+const books = [
+  {
+    title: "Profession, Months & Electronic",
+    cover: "/images/book1.png",
+    description:
+      "Learn about professions, months and basic electronics with colorful illustrations.",
+    pdf:
+      "https://drive.google.com/file/d/15VTmeT5K_M7C2pMM2JpZ0xn43yU_KUtY/view?usp=drivesdk",
+    sample:
+      "https://drive.google.com/file/d/1bjF0-nXjT8z1XzMizmGcvGB0W_Svhi3N/view?usp=drivesdk",
+  },
+  {
+    title: "Fruits, Vegetables & Flowers",
+    cover: "/images/book2.png",
+    description:
+      "Fun introduction to fruits, vegetables, and flowers with interactive learning.",
+    pdf:
+      "https://drive.google.com/file/d/1fSbqZnbt-gIpw2ZgbxBTDKoUPNpVv_hZ/view?usp=drivesdk",
+    sample:
+      "https://drive.google.com/file/d/1bjF0-nXjT8z1XzMizmGcvGB0W_Svhi3N/view?usp=drivesdk",
+  },
+  {
+    title: "Shapes, Colours & Body Parts",
+    cover: "/images/book3.png",
+    description:
+      "Identify shapes, colors and body parts with engaging activities for kids.",
+    pdf:
+      "https://drive.google.com/file/d/18yWQnyRVyaMjpH6rvm8Nsna5VS0KJMB3/view?usp=drivesdk",
+    sample:
+      "https://drive.google.com/file/d/1bjF0-nXjT8z1XzMizmGcvGB0W_Svhi3N/view?usp=drivesdk",
+  },
+  {
+    title: "Animals, Birds & Insects",
+    cover: "/images/book4.png",
+    description:
+      "Discover animals, birds and insects with realistic illustrations.",
+    pdf:
+      "https://drive.google.com/file/d/1MmeLRLZewoj_CCQdERmyTWFaj8LAKQ0M/view?usp=drivesdk",
+    sample:
+      "https://drive.google.com/file/d/1bjF0-nXjT8z1XzMizmGcvGB0W_Svhi3N/view?usp=drivesdk",
+  },
+];
 
-    <!-- Modal -->
-    <div
-      id="modalOverlay"
-      class="hidden fixed inset-0 bg-black/50 items-center justify-center p-4"
-      aria-hidden="true"
-    >
-      <div
-        class="bg-white rounded-2xl shadow-xl max-w-lg w-full p-6 relative"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="modalTitle"
-      >
-        <button
-          id="closeModal"
-          class="absolute top-3 right-3 text-gray-600 hover:text-black text-xl"
-          aria-label="Close"
+export default function KidsBooksWebsite() {
+  const [selectedBook, setSelectedBook] = useState(null);
+  const [library, setLibrary] = useState([]);
+  const [showLibrary, setShowLibrary] = useState(false);
+
+  // Load library from localStorage
+  useEffect(() => {
+    const stored = JSON.parse(localStorage.getItem("myLibrary")) || [];
+    setLibrary(stored);
+  }, []);
+
+  // Save library to localStorage whenever updated
+  useEffect(() => {
+    localStorage.setItem("myLibrary", JSON.stringify(library));
+  }, [library]);
+
+  const handleBuy = (book) => {
+    const paymentLink = `upi://pay?pa=9574858717@ibl&pn=CliffClimber&am=99&cu=INR&tn=Payment for ${encodeURIComponent(
+      book.title
+    )}`;
+    window.open(paymentLink, "_blank");
+
+    // After payment, auto-open PDF & add to library
+    setTimeout(() => {
+      window.open(book.pdf, "_blank");
+      if (!library.find((b) => b.title === book.title)) {
+        setLibrary([...library, book]);
+      }
+    }, 3000);
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-sky-100 to-white p-6">
+      {/* Header */}
+      <header className="text-center mb-10">
+        <h1 className="text-4xl font-bold text-sky-800 mb-2">
+          Cliff Climber Kids Books
+        </h1>
+        <p className="text-sky-600">Fun learning for curious little minds</p>
+        <Button
+          variant="outline"
+          className="mt-4 border-sky-600 text-sky-700 hover:bg-sky-50 rounded-xl"
+          onClick={() => setShowLibrary(!showLibrary)}
         >
-          ✕
-        </button>
+          {showLibrary ? "Back to Store" : "My Library"}
+        </Button>
+      </header>
 
-        <img id="modalCover" src="" alt="" class="w-full h-72 object-contain mb-4" />
-        <h2 id="modalTitle" class="text-2xl font-bold text-sky-800 mb-2"></h2>
-        <p id="modalDesc" class="text-gray-600 mb-4"></p>
-
-        <a
-          id="sampleBtn"
-          href="#"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="block w-full text-center border border-sky-600 text-sky-700 hover:bg-sky-50 rounded-xl px-4 py-2 mb-3"
-        >
-          Download Sample PDF
-        </a>
-
-        <button
-          id="buyBtn"
-          class="w-full bg-sky-600 text-white rounded-xl px-4 py-2"
-        >
-          Buy & Access Full PDF
-        </button>
-      </div>
-    </div>
-
-    <!-- Footer -->
-    <footer class="text-center mt-12 text-sky-700">
-      <p>© 2025 Cliff Climber Kids Books. All rights reserved.</p>
-    </footer>
-
-    <script>
-      // --- Data --------------------------------------------------------------
-      const books = [
-        {
-          title: "Profession, Months & Electronic",
-          cover: "/images/book1.png",
-          description: "Learn about professions, months and basic electronics with colorful illustrations.",
-          pdf: "https://drive.google.com/file/d/15VTmeT5K_M7C2pMM2JpZ0xn43yU_KUtY/view?usp=drivesdk",
-          sample: "https://drive.google.com/file/d/1bjF0-nXjT8z1XzMizmGcvGB0W_Svhi3N/view?usp=drivesdk",
-          price: 99
-        },
-        {
-          title: "Fruits, Vegetables & Flowers",
-          cover: "/images/book2.png",
-          description: "Fun introduction to fruits, vegetables, and flowers with interactive learning.",
-          pdf: "https://drive.google.com/file/d/1fSbqZnbt-gIpw2ZgbxBTDKoUPNpVv_hZ/view?usp=drivesdk",
-          sample: "https://drive.google.com/file/d/1bjF0-nXjT8z1XzMizmGcvGB0W_Svhi3N/view?usp=drivesdk",
-          price: 99
-        },
-        {
-          title: "Shapes, Colours & Body Parts",
-          cover: "/images/book3.png",
-          description: "Identify shapes, colors and body parts with engaging activities for kids.",
-          pdf: "https://drive.google.com/file/d/18yWQnyRVyaMjpH6rvm8Nsna5VS0KJMB3/view?usp=drivesdk",
-          sample: "https://drive.google.com/file/d/1bjF0-nXjT8z1XzMizmGcvGB0W_Svhi3N/view?usp=drivesdk",
-          price: 99
-        },
-        {
-          title: "Animals, Birds & Insects",
-          cover: "/images/book4.png",
-          description: "Discover animals, birds and insects with realistic illustrations.",
-          pdf: "https://drive.google.com/file/d/1MmeLRLZewoj_CCQdERmyTWFaj8LAKQ0M/view?usp=drivesdk",
-          sample: "https://drive.google.com/file/d/1bjF0-nXjT8z1XzMizmGcvGB0W_Svhi3N/view?usp=drivesdk",
-          price: 99
-        }
-      ];
-
-      // --- State -------------------------------------------------------------
-      const LS_KEY = "myLibrary";
-      let library = [];
-
-      function loadLibrary() {
-        try {
-          const raw = localStorage.getItem(LS_KEY);
-          library = raw ? JSON.parse(raw) : [];
-        } catch (e) {
-          console.warn("Failed to parse library:", e);
-          library = [];
-        }
-      }
-
-      function saveLibrary() {
-        localStorage.setItem(LS_KEY, JSON.stringify(library));
-      }
-
-      // --- UI helpers --------------------------------------------------------
-      const root = document.getElementById("root");
-      const toggleBtn = document.getElementById("toggleLibraryBtn");
-      const modalOverlay = document.getElementById("modalOverlay");
-      const closeModalBtn = document.getElementById("closeModal");
-      const modalCover = document.getElementById("modalCover");
-      const modalTitle = document.getElementById("modalTitle");
-      const modalDesc = document.getElementById("modalDesc");
-      const sampleBtn = document.getElementById("sampleBtn");
-      const buyBtn = document.getElementById("buyBtn");
-
-      let showLibrary = false;
-      let selectedBook = null;
-
-      function setShowLibrary(val) {
-        showLibrary = val;
-        toggleBtn.textContent = showLibrary ? "Back to Store" : "My Library";
-        render();
-      }
-
-      function openModal(book) {
-        selectedBook = book;
-        modalCover.src = book.cover;
-        modalCover.alt = `Cover of ${book.title}`;
-        modalTitle.textContent = book.title;
-        modalDesc.textContent = book.description;
-        sampleBtn.href = book.sample;
-        modalOverlay.classList.remove("hidden");
-        modalOverlay.classList.add("flex");
-        modalOverlay.setAttribute("aria-hidden", "false");
-      }
-
-      function closeModal() {
-        selectedBook = null;
-        modalOverlay.classList.add("hidden");
-        modalOverlay.classList.remove("flex");
-        modalOverlay.setAttribute("aria-hidden", "true");
-      }
-
-      function handleBuy(book) {
-        // Build UPI deep link
-        const upi = new URL("upi://pay");
-        upi.searchParams.set("pa", "9574858717@ibl");
-        upi.searchParams.set("pn", "CliffClimber");
-        upi.searchParams.set("am", String(book.price || 99));
-        upi.searchParams.set("cu", "INR");
-        upi.searchParams.set("tn", `Payment for ${book.title}`);
-
-        // Open in a new tab (some mobile browsers support UPI deep links)
-        window.open(upi.toString(), "_blank");
-
-        // After payment window, grant access
-        setTimeout(() => {
-          // Open full PDF
-          window.open(book.pdf, "_blank");
-
-          // Add to library if not present
-          if (!library.find(b => b.title === book.title)) {
-            library.push(book);
-            saveLibrary();
-            if (showLibrary) render();
-          }
-        }, 3000);
-      }
-
-      function card(book) {
-        const div = document.createElement("div");
-        div.className = "cursor-pointer";
-
-        div.innerHTML = \`
-          <div class="rounded-2xl shadow-md overflow-hidden bg-white hover:shadow-lg transition">
-            <img src="\${book.cover}" alt="Cover of \${book.title}" class="w-full h-64 object-contain bg-white" />
-            <div class="p-4 text-center">
-              <h3 class="text-lg font-semibold text-sky-700">\${book.title}</h3>
+      {!showLibrary ? (
+        // Store Books Grid
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {books.map((book, index) => (
+            <motion.div
+              key={index}
+              role="button"
+              tabIndex={0}
+              whileHover={{ scale: 1.05 }}
+              className="cursor-pointer"
+              onClick={() => setSelectedBook(book)}
+              onKeyDown={(e) => e.key === "Enter" && setSelectedBook(book)}
+            >
+              <Card className="rounded-2xl shadow-md overflow-hidden">
+                <img
+                  src={book.cover}
+                  alt={`Cover of ${book.title}`}
+                  className="w-full h-64 object-contain bg-white"
+                />
+                <CardContent className="p-4 text-center">
+                  <h2 className="text-lg font-semibold text-sky-700">
+                    {book.title}
+                  </h2>
+                </CardContent>
+              </Card>
+            </motion.div>
+          ))}
+        </div>
+      ) : (
+        // My Library Section
+        <div>
+          <h2 className="text-2xl font-bold text-sky-800 mb-6 text-center">
+            📚 My Library
+          </h2>
+          {library.length === 0 ? (
+            <p className="text-center text-gray-600">
+              No books purchased yet. Buy a book to see it here.
+            </p>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {library.map((book, index) => (
+                <Card
+                  key={index}
+                  className="rounded-2xl shadow-md overflow-hidden"
+                >
+                  <img
+                    src={book.cover}
+                    alt={`Cover of ${book.title}`}
+                    className="w-full h-64 object-contain bg-white"
+                  />
+                  <CardContent className="p-4 text-center">
+                    <h2 className="text-lg font-semibold text-sky-700">
+                      {book.title}
+                    </h2>
+                    <Button
+                      className="w-full mt-3 bg-sky-600 text-white rounded-xl"
+                      onClick={() => window.open(book.pdf, "_blank")}
+                    >
+                      Open PDF
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
-          </div>\`;
+          )}
+        </div>
+      )}
 
-        div.addEventListener("click", () => openModal(book));
-        return div;
-      }
+      {/* Book Modal */}
+      <AnimatePresence>
+        {selectedBook && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4"
+          >
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              className="bg-white rounded-2xl shadow-xl max-w-lg w-full p-6 relative"
+            >
+              <button
+                className="absolute top-3 right-3 text-gray-600 hover:text-black"
+                onClick={() => setSelectedBook(null)}
+              >
+                ✕
+              </button>
+              <img
+                src={selectedBook.cover}
+                alt={`Cover of ${selectedBook.title}`}
+                className="w-full h-72 object-contain mb-4"
+              />
+              <h2 className="text-2xl font-bold text-sky-800 mb-2">
+                {selectedBook.title}
+              </h2>
+              <p className="text-gray-600 mb-4">
+                {selectedBook.description}
+              </p>
 
-      function libraryCard(book) {
-        const wrapper = document.createElement("div");
-        wrapper.className = "rounded-2xl shadow-md overflow-hidden bg-white";
+              {/* Sample PDF button */}
+              <Button
+                variant="outline"
+                className="w-full mb-3 border-sky-600 text-sky-700 hover:bg-sky-50 rounded-xl"
+                onClick={() => window.open(selectedBook.sample, "_blank")}
+              >
+                Download Sample PDF
+              </Button>
 
-        const btnId = "open-" + Math.random().toString(36).slice(2);
+              {/* Buy button */}
+              <Button
+                className="w-full bg-sky-600 text-white rounded-xl"
+                onClick={() => handleBuy(selectedBook)}
+              >
+                Buy & Access Full PDF
+              </Button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-        wrapper.innerHTML = \`
-          <img src="\${book.cover}" alt="Cover of \${book.title}" class="w-full h-64 object-contain bg-white" />
-          <div class="p-4 text-center">
-            <h3 class="text-lg font-semibold text-sky-700">\${book.title}</h3>
-            <a id="\${btnId}" href="\${book.pdf}" target="_blank" rel="noopener noreferrer"
-               class="inline-block w-full mt-3 bg-sky-600 text-white rounded-xl px-4 py-2 text-center">
-              Open PDF
-            </a>
-          </div>\`;
-
-        return wrapper;
-      }
-
-      function render() {
-        root.innerHTML = "";
-        if (!showLibrary) {
-          // Store grid
-          const grid = document.createElement("div");
-          grid.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6";
-          books.forEach(b => grid.appendChild(card(b)));
-          root.appendChild(grid);
-        } else {
-          // Library view
-          const title = document.createElement("h2");
-          title.className = "text-2xl font-bold text-sky-800 mb-6 text-center";
-          title.textContent = "📚 My Library";
-          root.appendChild(title);
-
-          if (!library.length) {
-            const p = document.createElement("p");
-            p.className = "text-center text-gray-600";
-            p.textContent = "No books purchased yet. Buy a book to see it here.";
-            root.appendChild(p);
-          } else {
-            const grid = document.createElement("div");
-            grid.className = "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6";
-            library.forEach(b => grid.appendChild(libraryCard(b)));
-            root.appendChild(grid);
-          }
-        }
-      }
-
-      // --- Events ------------------------------------------------------------
-      toggleBtn.addEventListener("click", () => setShowLibrary(!showLibrary));
-      closeModalBtn.addEventListener("click", closeModal);
-      modalOverlay.addEventListener("click", (e) => {
-        if (e.target === modalOverlay) closeModal();
-      });
-      buyBtn.addEventListener("click", () => {
-        if (selectedBook) handleBuy(selectedBook);
-      });
-      sampleBtn.addEventListener("click", (e) => {
-        // ensure it triggers download if the server sets headers;
-        // for Drive links this usually opens in a viewer.
-      });
-
-      // --- Init --------------------------------------------------------------
-      loadLibrary();
-      render();
-    </script>
-  </body>
-</html>
+      {/* Footer */}
+      <footer className="text-center mt-12 text-sky-700">
+        <p>© 2025 Cliff Climber Kids Books. All rights reserved.</p>
+      </footer>
+    </div>
+  );
+}      
