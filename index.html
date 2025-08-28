@@ -28,8 +28,8 @@
       <img id="modalCover" src="" alt="Book Cover" />
       <h2 id="modalTitle"></h2>
       <p id="modalDesc"></p>
-      <button id="sampleBtn">Download Sample PDF</button>
-      <button id="buyBtn">Buy & Access Full PDF</button>
+      <button id="sampleBtn">Open Sample</button>
+      <button id="buyBtn">Buy & Open Full PDF</button>
     </div>
   </div>
 
@@ -40,32 +40,32 @@
   <script>
     const books = [
       {
-        title: "Profession, Months & Electronic",
-        cover: "https://photos.app.goo.gl/svWrsp9ZsrAJqLiK8",
-        description: "Learn about professions, months and basic electronics with colorful illustrations.",
-        pdf: "https://drive.google.com/file/d/15VTmeT5K_M7C2pMM2JpZ0xn43yU_KUtY/view?usp=drivesdk",
-        sample: "https://drive.google.com/file/d/1bjF0-nXjT8z1XzMizmGcvGB0W_Svhi3N/view?usp=drivesdk"
+        title: "Book 1",
+        cover: "https://drive.google.com/file/d/1fn2eseuAu3UQ4tUUrI0MlAU3IebuLnyW/preview",
+        description: "Learn about professions, months and basics.",
+        pdf: "https://drive.google.com/file/d/1fn2eseuAu3UQ4tUUrI0MlAU3IebuLnyW/view?usp=drivesdk",
+        sample: "https://drive.google.com/file/d/1fn2eseuAu3UQ4tUUrI0MlAU3IebuLnyW/view?usp=drivesdk"
       },
       {
-        title: "Fruits, Vegetables & Flowers",
-        cover: "https://photos.app.goo.gl/w69uoF8z884qmdBs6",
-        description: "Fun introduction to fruits, vegetables, and flowers with interactive learning.",
-        pdf: "https://drive.google.com/file/d/1fSbqZnbt-gIpw2ZgbxBTDKoUPNpVv_hZ/view?usp=drivesdk",
-        sample: "https://drive.google.com/file/d/1bjF0-nXjT8z1XzMizmGcvGB0W_Svhi3N/view?usp=drivesdk"
+        title: "Book 2",
+        cover: "https://drive.google.com/file/d/1VFSBxnz1uYXQK1Ckb34uUa1m3BhV8H-o/preview",
+        description: "Fruits, vegetables, and flowers fun learning.",
+        pdf: "https://drive.google.com/file/d/1VFSBxnz1uYXQK1Ckb34uUa1m3BhV8H-o/view?usp=drivesdk",
+        sample: "https://drive.google.com/file/d/1VFSBxnz1uYXQK1Ckb34uUa1m3BhV8H-o/view?usp=drivesdk"
       },
       {
-        title: "Shapes, Colours & Body Parts",
-        cover: "https://photos.app.goo.gl/6tJn6CpuCLxcVdhg8",
-        description: "Identify shapes, colors and body parts with engaging activities for kids.",
-        pdf: "https://drive.google.com/file/d/18yWQnyRVyaMjpH6rvm8Nsna5VS0KJMB3/view?usp=drivesdk",
-        sample: "https://drive.google.com/file/d/1bjF0-nXjT8z1XzMizmGcvGB0W_Svhi3N/view?usp=drivesdk"
+        title: "Book 3",
+        cover: "https://drive.google.com/file/d/1A8TdTqcc4AOux2qnPFxDOH25Km7WuVC7/preview",
+        description: "Shapes, colours and body parts activities.",
+        pdf: "https://drive.google.com/file/d/1A8TdTqcc4AOux2qnPFxDOH25Km7WuVC7/view?usp=drivesdk",
+        sample: "https://drive.google.com/file/d/1A8TdTqcc4AOux2qnPFxDOH25Km7WuVC7/view?usp=drivesdk"
       },
       {
-        title: "Animals, Birds & Insects",
-        cover: "https://photos.app.goo.gl/vdqG4g2HVhFUJMcY9",
-        description: "Discover animals, birds and insects with realistic illustrations.",
-        pdf: "https://drive.google.com/file/d/1MmeLRLZewoj_CCQdERmyTWFaj8LAKQ0M/view?usp=drivesdk",
-        sample: "https://drive.google.com/file/d/1bjF0-nXjT8z1XzMizmGcvGB0W_Svhi3N/view?usp=drivesdk"
+        title: "Book 4",
+        cover: "https://drive.google.com/file/d/1SXCYiz3Oa3jq_Wp9Z02rgrXiYRUSrPG0/preview",
+        description: "Animals, birds and insects exploration.",
+        pdf: "https://drive.google.com/file/d/1SXCYiz3Oa3jq_Wp9Z02rgrXiYRUSrPG0/view?usp=drivesdk",
+        sample: "https://drive.google.com/file/d/1SXCYiz3Oa3jq_Wp9Z02rgrXiYRUSrPG0/view?usp=drivesdk"
       }
     ];
 
@@ -90,7 +90,7 @@
         const div = document.createElement("div");
         div.className = "card";
         div.innerHTML = `
-          <img src="${book.cover}" alt="${book.title}" />
+          <iframe src="${book.cover}" width="100%" height="250" style="border:none;"></iframe>
           <h3>${book.title}</h3>
         `;
         div.addEventListener("click", () => openModal(book));
@@ -108,7 +108,7 @@
         const div = document.createElement("div");
         div.className = "card";
         div.innerHTML = `
-          <img src="${book.cover}" alt="${book.title}" />
+          <iframe src="${book.cover}" width="100%" height="250" style="border:none;"></iframe>
           <h3>${book.title}</h3>
           <button onclick="window.open('${book.pdf}','_blank')">Open PDF</button>
         `;
@@ -193,11 +193,7 @@
       text-align: center;
       cursor: pointer;
     }
-    .card img {
-      width: 100%;
-      height: 250px;
-      object-fit: contain;
-      background: #fff;
+    .card iframe {
       border-radius: 10px;
     }
     .card h3 {
@@ -242,4 +238,5 @@
     }
   </style>
 </body>
-</html>
+  </html>
+  
