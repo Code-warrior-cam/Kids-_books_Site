@@ -1,128 +1,147 @@
                       <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kids Books Website</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f9f9f9;
-      color: #333;
-    }
-
-    /* Cover / Hero Section */
-    .hero {
-      height: 70vh;
-      background: url("images/cover.jpg") center/cover no-repeat;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      color: white;
-    }
-    .hero h1 {
-      font-size: 3rem;
-      background: rgba(0,0,0,0.5);
-      padding: 20px;
-      border-radius: 12px;
-    }
-
-    /* Books Section */
-    .container {
-      max-width: 1000px;
-      margin: 40px auto;
-      padding: 20px;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
-    }
-    .card {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      overflow: hidden;
-      transition: transform 0.2s ease;
-    }
-    .card:hover {
-      transform: scale(1.05);
-    }
-    .card img {
-      width: 100%;
-      height: 280px;
-      object-fit: cover;
-    }
-    .card h3 {
-      margin: 15px;
-      font-size: 1.2rem;
-    }
-    .card p {
-      margin: 0 15px 15px;
-      font-size: 0.95rem;
-      color: #555;
-    }
-    .card a {
-      display: block;
-      margin: 0 15px 15px;
-      padding: 10px;
-      text-align: center;
-      background: #4CAF50;
-      color: white;
-      text-decoration: none;
-      border-radius: 8px;
-    }
-    .card a:hover {
-      background: #388E3C;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kids Books Library</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <header>
+    <h1>📚 Kids Books Library</h1>
+    <nav>
+      <button onclick="showSection('store')">Store</button>
+      <button onclick="showSection('library')">My Library</button>
+    </nav>
+  </header>
 
-  <!-- Cover Section -->
-  <div class="hero">
-    <h1>Welcome to Kids Books</h1>
-  </div>
+  <!-- Store Section -->
+  <section id="store" class="active">
+    <div class="book-grid" id="book-list"></div>
+  </section>
 
-  <!-- Books Section -->
-  <div class="container">
-    <h2>Our Books</h2>
-    <div class="grid">
-      <!-- Book 1 -->
-      <div class="card">
-        <img src="images/book1.png" alt="Book 1" />
-        <h3>Professions, Months & Electronics</h3>
-        <p>Learn about professions, months, and electronics with colorful illustrations.</p>
-        <a href="books/book1.pdf" target="_blank">Read PDF</a>
-      </div>
+  <!-- My Library Section -->
+  <section id="library">
+    <div class="book-grid" id="library-list"></div>
+  </section>
 
-      <!-- Book 2 -->
-      <div class="card">
-        <img src="images/book2.png" alt="Book 2" />
-        <h3>Animals & Nature</h3>
-        <p>Discover amazing animals and the beauty of nature.</p>
-        <a href="books/book2.pdf" target="_blank">Read PDF</a>
-      </div>
-
-      <!-- Book 3 -->
-      <div class="card">
-        <img src="images/book3.png" alt="Book 3" />
-        <h3>Numbers & Alphabets</h3>
-        <p>Fun introduction to numbers and alphabets for kids.</p>
-        <a href="books/book3.pdf" target="_blank">Read PDF</a>
-      </div>
-
-      <!-- Book 4 -->
-      <div class="card">
-        <img src="images/book4.png" alt="Book 4" />
-        <h3>Colors & Shapes</h3>
-        <p>Learn about basic colors and shapes with engaging pictures.</p>
-        <a href="books/book4.pdf" target="_blank">Read PDF</a>
-      </div>
+  <!-- Book Modal -->
+  <div id="book-modal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h2 id="modal-title"></h2>
+      <img id="modal-cover" src="" alt="Book Cover">
+      <p id="modal-description"></p>
+      <button id="buy-btn">Buy & Read</button>
     </div>
   </div>
 
+  <script>
+    const books = [
+      {
+        title: "Profession, Months & Electronic",
+        cover: "images/book1.png",
+        description: "Learn about professions, months and basic electronics with colorful illustrations.",
+        pdf: "https://example.com/book1.pdf"
+      },
+      {
+        title: "Fruits & Vegetables",
+        cover: "images/book2.png",
+        description: "Discover fruits and vegetables in a fun and interactive way.",
+        pdf: "https://example.com/book2.pdf"
+      },
+      {
+        title: "Animals & Birds",
+        cover: "images/book3.png",
+        description: "Explore the amazing world of animals and birds.",
+        pdf: "https://example.com/book3.pdf"
+      },
+      {
+        title: "Numbers & Alphabets",
+        cover: "images/book4.png",
+        description: "Learn numbers and alphabets with colorful pictures.",
+        pdf: "https://example.com/book4.pdf"
+      }
+    ];
+
+    function renderBooks() {
+      const bookList = document.getElementById("book-list");
+      bookList.innerHTML = "";
+      books.forEach((book, index) => {
+        const div = document.createElement("div");
+        div.className = "book-card";
+        div.innerHTML = `
+          <img src="${book.cover}" alt="${book.title}">
+          <h3>${book.title}</h3>
+          <button onclick="openModal(${index})">View</button>
+        `;
+        bookList.appendChild(div);
+      });
+    }
+
+    function openModal(index) {
+      const book = books[index];
+      document.getElementById("modal-title").textContent = book.title;
+      document.getElementById("modal-cover").src = book.cover;
+      document.getElementById("modal-description").textContent = book.description;
+      document.getElementById("buy-btn").onclick = () => {
+        window.open(book.pdf, "_blank");
+        saveToLibrary(book);
+      };
+      document.getElementById("book-modal").style.display = "block";
+    }
+
+    function closeModal() {
+      document.getElementById("book-modal").style.display = "none";
+    }
+
+    function saveToLibrary(book) {
+      let library = JSON.parse(localStorage.getItem("library")) || [];
+      if (!library.find(b => b.title === book.title)) {
+        library.push(book);
+        localStorage.setItem("library", JSON.stringify(library));
+        renderLibrary();
+      }
+    }
+
+    function renderLibrary() {
+      const libraryList = document.getElementById("library-list");
+      libraryList.innerHTML = "";
+      const library = JSON.parse(localStorage.getItem("library")) || [];
+      library.forEach(book => {
+        const div = document.createElement("div");
+        div.className = "book-card";
+        div.innerHTML = `
+          <img src="${book.cover}" alt="${book.title}">
+          <h3>${book.title}</h3>
+          <button onclick="window.open('${book.pdf}', '_blank')">Read</button>
+        `;
+        libraryList.appendChild(div);
+      });
+    }
+
+    function showSection(section) {
+      document.getElementById("store").classList.remove("active");
+      document.getElementById("library").classList.remove("active");
+      document.getElementById(section).classList.add("active");
+    }
+
+    renderBooks();
+    renderLibrary();
+  </script>
+
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f9f9f9; }
+    header { background: #4CAF50; color: white; padding: 1rem; text-align: center; }
+    nav button { margin: 5px; padding: 8px 15px; cursor: pointer; }
+    .book-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; padding: 20px; }
+    .book-card { background: white; padding: 10px; border-radius: 8px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    .book-card img { width: 100%; height: 200px; object-fit: cover; border-radius: 5px; }
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); }
+    .modal-content { background: white; margin: 10% auto; padding: 20px; width: 300px; border-radius: 10px; }
+    .close { float: right; cursor: pointer; font-size: 20px; }
+    section { display: none; }
+    section.active { display: block; }
+  </style>
 </body>
 </html>
